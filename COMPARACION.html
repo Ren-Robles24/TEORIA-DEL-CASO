@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparación CPP Perú vs. El Secreto de sus Ojos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Variables CSS para una gestión de colores y estilos más sencilla */
+        :root {
+            --light-bg: #f5f7fa; /* Fondo gris muy claro */
+            --card-bg: #ffffff; /* Blanco para tarjetas de contenido */
+            --text-dark: #2d3748; /* Gris oscuro para texto */
+            --header-bg: #1a202c; /* Azul oscuro para encabezado/footer */
+            --accent-blue: #3182ce; /* Azul vibrante para lo normativo (CPP) */
+            --accent-red: #e53e3e; /* Rojo tenue para lo fáctico (Película) */
+            --button-primary: #5a67d8; /* Azul púrpura para botones principales */
+            --button-hover: #434fba;
+            --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.15);
+            --border-radius-card: 15px;
+            --border-radius-button: 10px;
+            --transition-speed: 0.4s ease-in-out;
+        }
+
+        /* Estilos base del cuerpo */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden; /* Previene scroll horizontal */
+        }
+
+        /* Encabezado fijo (Navbar) */
+        .header-bar {
+            background-color: var(--header-bg);
+            padding: 25px 30px;
+            text-align: center;
+            box-shadow: var(--shadow-medium);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-bar h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.3em;
+            color: var(--card-bg); /* Blanco para el título */
+            margin: 0;
+            letter-spacing: 1.5px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Contenedor principal */
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Contenedor de la comparación (tarjeta individual) */
+        #comparison-display {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius-card);
+            padding: 40px;
+            box-shadow: var(--shadow-medium);
+            width: 100%;
+            box-sizing: border-box;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity var(--transition-speed), transform var(--transition-speed);
+        }
+
+        #comparison-display.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Título del artículo */
+        #comparison-display h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5em;
+            color: var(--button-primary);
+            text-align: center;
+            margin-bottom: 35px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--accent-blue);
+            line-height: 1.3;
+        }
+
+        /* Contenedor de las dos columnas de comparación */
+        .comparison-columns {
+            display: flex;
+            flex-wrap: wrap; /* Permite que las columnas se apilen en pantallas pequeñas */
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .column {
+            flex: 1; /* Ocupa el espacio disponible */
+            min-width: 300px; /* Ancho mínimo antes de apilar */
+            background-color: #fcfdff;
+            border-radius: var(--border-radius-button);
+            padding: 28px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid #e0e6ed;
+        }
+
+        .column h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.4em;
+            margin-top: 0;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid; /* Color definido por span dentro del h3 */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .column h3.cpp-title {
+            color: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        .column h3.movie-title {
+            color: var(--accent-red);
+            border-color: var(--accent-red);
+        }
+
+        .column p, .column ul {
+            font-size: 1.05em;
+            line-height: 1.7;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+        .column ul {
+            padding-left: 25px;
+            list-style-type: disc;
+        }
+        .column li {
+            margin-bottom: 8px;
+        }
+
+        /* Contenedor de botones de navegación */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            width: 100%;
+            margin-top: 40px;
+            padding: 0 15px;
+        }
+
+        /* Estilo base del botón */
+        .nav-button {
+            background-color: var(--button-primary);
+            color: var(--card-bg);
+            padding: 16px 35px;
+            border: none;
+            border-radius: var(--border-radius-button);
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
+            flex-shrink: 0;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .nav-button:hover:not(:disabled) {
+            background-color: var(--button-hover);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .nav-button:disabled {
+            background-color: #cbd5e0;
+            color: #718096;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Estilo específico para botón "Volver al inicio" */
+        .nav-button.return-home {
+            background-color: var(--header-bg); /* Color del encabezado */
+        }
+        .nav-button.return-home:hover:not(:disabled) {
+            background-color: #2d3748; /* Tono más oscuro de header-bg */
+        }
+
+        /* Pie de página */
+        .footer {
+            margin-top: auto;
+            padding: 25px 20px;
+            background-color: var(--header-bg);
+            color: var(--card-bg);
+            text-align: center;
+            font-size: 0.95em;
+            width: 100%;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-bar h1 {
+                font-size: 1.8em;
+                padding: 15px;
+            }
+            .container {
+                margin: 25px auto;
+                padding: 15px;
+            }
+            #comparison-display {
+                padding: 25px 20px;
+            }
+            #comparison-display h2 {
+                font-size: 2em;
+                margin-bottom: 25px;
+            }
+            .comparison-columns {
+                flex-direction: column;
+                gap: 25px;
+            }
+            .column {
+                min-width: unset;
+                padding: 20px;
+            }
+            .column h3 {
+                font-size: 1.25em;
+            }
+            .column p, .column ul {
+                font-size: 1em;
+            }
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .nav-button {
+                min-width: unset;
+                width: 100%;
+                font-size: 1.1em;
+                padding: 14px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-bar h1 {
+                font-size: 1.3em;
+            }
+            #comparison-display h2 {
+                font-size: 1.6em;
+            }
+            .column h3 {
+                font-size: 1.1em;
+            }
+            .column p, .column ul {
+                font-size: 0.95em;
+            }
+            .nav-button {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-bar">
+        <h1>📊 Comparación Ampliada: El Secreto de Sus Ojos vs. Código Procesal Penal peruano (D. Leg. 957)</h1>
+    </header>
+
+    <main class="container">
+        <div id="comparison-display">
+            </div>
+
+        <div class="navigation-buttons">
+            <button class="nav-button" id="prevComparisonBtn" disabled><i class="fas fa-chevron-left"></i> Anterior</button>
+            <button class="nav-button" id="nextComparisonBtn">Siguiente <i class="fas fa-chevron-right"></i></button>
+            <button class="nav-button return-home" id="returnHomeBtn" style="display: none;">Volver al inicio <i class="fas fa-home"></i></button>
+        </div>
+    </main>
+
+    <footer class="footer">
+        Desarrollado con fines educativos por Renzo Vidal Robles Orosco – 2025
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const comparisonDisplay = document.getElementById('comparison-display');
+            const prevComparisonBtn = document.getElementById('prevComparisonBtn');
+            const nextComparisonBtn = document.getElementById('nextComparisonBtn');
+            const returnHomeBtn = document.getElementById('returnHomeBtn');
+
+            // --- Datos de la comparación ---
+            const comparisons = [
+                {
+                    title: "Artículo I – Principios del Proceso",
+                    movie: `
+                        El proceso retratado ignora principios básicos: no hay contradictorio, imparcialidad, ni derecho a defensa. La verdad no se alcanza por vía legal, sino por medios personales. El Estado no protege a la víctima ni al imputado.
+                    `,
+                    cpp: `
+                        El **Artículo I** señala que el proceso penal debe buscar la averiguación de la verdad, aplicar el derecho penal con justicia y tutelar los derechos del imputado y de la víctima. Se rige por:
+                        <ul>
+                            <li>Presunción de inocencia</li>
+                            <li>Legalidad</li>
+                            <li>Contradicción</li>
+                            <li>Motivación de las resoluciones</li>
+                            <li>Oralidad</li>
+                            <li>Celeridad</li>
+                            <li>Inmediación</li>
+                            <li>Concentración</li>
+                            <li>Publicidad</li>
+                        </ul>
+                        La violación sistemática de estos principios en la película contrasta con el modelo garantista del CPP.
+                    `
+                },
+                {
+                    title: "Artículos 72 a 113 – Sujetos Procesales",
+                    movie: `
+                        El fiscal está ausente o subordinado al poder político. El juez no actúa como garante de los derechos. Espósito (secretario judicial) asume una función investigadora informal y extralimitada. No hay defensor técnico del imputado ni participación procesal efectiva de la víctima, quien carece de voz o representación legal.
+                    `,
+                    cpp: `
+                        Según los **Artículos 72 a 113**, los sujetos procesales son:
+                        <ul>
+                            <li>El Juez (garante de los derechos y del debido proceso)</li>
+                            <li>El Fiscal (titular de la acción penal y director de la investigación)</li>
+                            <li>El Imputado (con derecho a defensa y presunción de inocencia)</li>
+                            <li>El Defensor (asistencia técnica obligatoria desde el primer acto)</li>
+                            <li>La Víctima o Agraviado (con derechos de participación y tutela)</li>
+                            <li>El Actor Civil (para la pretensión civil)</li>
+                            <li>El Tercero Civilmente Responsable</li>
+                        </ul>
+                        Cada uno debe actuar dentro de funciones delimitadas, asegurando la equidad procesal y el control judicial de legalidad. Desde el primer acto, el imputado debe ser formalmente identificado (Art. 72) y asistido por un defensor técnico.
+                    `
+                },
+                {
+                    title: "Artículos 268 a 285 – Prisión Preventiva",
+                    movie: `
+                        Gómez es liberado arbitrariamente sin control judicial transparente, por influencias políticas y sin justificación. El primer detenido es torturado y retenido ilegalmente sin motivación legal ni cumplimiento de garantías procesales. Se observa detención arbitraria y ausencia de criterios de peligro procesal.
+                    `,
+                    cpp: `
+                        El **Art. 268** establece que la prisión preventiva es una medida de excepción que requiere la concurrencia copulativa de tres presupuestos materiales:
+                        <ol>
+                            <li>Graves y fundados elementos de convicción que vinculen al imputado con el delito.</li>
+                            <li>Que la pena probable a imponerse sea superior a cuatro años de pena privativa de libertad.</li>
+                            <li>Peligro procesal:</li>
+                                <ul>
+                                    <li>Peligro de fuga (arraigo, gravedad de la pena, magnitud del daño, conducta procesal del imputado).</li>
+                                    <li>Peligro de obstaculización (destrucción de pruebas, influencia sobre testigos).</li>
+                                </ul>
+                        </ol>
+                        Debe haber audiencia pública (Art. 271) y motivación escrita de la decisión. Se prohíben las detenciones arbitrarias o sin mandato judicial, lo que sí ocurre flagrantemente en la película.
+                    `
+                },
+                {
+                    title: "Artículos 345 a 355 – Etapa Intermedia",
+                    movie: `
+                        No se observa ningún control de la acusación ni una audiencia intermedia formal. No hay debate sobre la admisión o exclusión de pruebas, ni se emite un auto de citación a juicio. El caso pasa de una investigación fallida a la inacción institucional y el abandono.
+                    `,
+                    cpp: `
+                        La etapa intermedia asegura el control judicial del requerimiento fiscal (acusatorio o de sobreseimiento). Su finalidad es depurar el caso y evitar juicios innecesarios o arbitrarios.
+                        <br>
+                        Según los **Artículos 345 a 355**:
+                        <ul>
+                            <li>El Juez de la Investigación Preparatoria evalúa la acusación fiscal.</li>
+                            <li>Se realiza una audiencia de control de acusación donde las partes pueden:</li>
+                                <ul>
+                                    <li>Observar defectos formales o sustanciales de la acusación.</li>
+                                    <li>Ofrecer nuevos medios de prueba.</li>
+                                    <li>Solicitar la exclusión o incorporación de pruebas.</li>
+                                </ul>
+                            <li>El **Art. 355** exige la emisión de un auto de citación a juicio, que fija la sede, fecha y hora del juicio oral, designa al defensor, y ordena la presencia de peritos y testigos. Esta etapa es crucial para garantizar un juicio justo y preparado.
+                        </ul>
+                    `
+                },
+                {
+                    title: "Artículos 359 a 403 – Juicio Oral",
+                    movie: `
+                        En la película, no hay juicio oral. No se produce una audiencia pública, no se rinden pruebas ante un tribunal, ni se escuchan alegatos de defensa o acusación. La "decisión final" sobre el destino de Gómez (su encierro) se da completamente fuera de cualquier marco legal o judicial.
+                    `,
+                    cpp: `
+                        Los **Artículos 359 a 403** regulan el Juicio Oral, la etapa central y estelar del proceso penal, que se caracteriza por ser:
+                        <ul>
+                            <li>**Público:** Abierto a la ciudadanía (salvo excepciones).</li>
+                            <li>**Contradictorio:** Las partes exponen sus argumentos y refutan los del contrario.</li>
+                            <li>**Continuo:** Se desarrolla sin interrupciones innecesarias.</li>
+                            <li>**Inmediación:** El juez o tribunal tiene contacto directo con la prueba (testigos, peritos).</li>
+                            <li>**Oralidad:** Predomina la expresión oral.</li>
+                        </ul>
+                        El juicio oral es donde se actúa la prueba, se presentan los alegatos de apertura y clausura, y se respeta plenamente el derecho a defensa y a ser oído por un juez imparcial. Todo lo esencial del juicio moderno es omitido en la película.
+                    `
+                },
+                {
+                    title: "Artículos 409 a 445 – Recursos",
+                    movie: `
+                        En el sistema judicial retratado en la película, no se observa el ejercicio efectivo de recursos legales. No hay apelaciones frente a la liberación arbitraria de Gómez, ni mecanismos para impugnar el encubrimiento institucional o el archivo implícito del caso. La impunidad prevalece sin vías de revisión.
+                    `,
+                    cpp: `
+                        Los **Artículos 409 a 445** establecen el derecho fundamental a impugnar resoluciones judiciales, a través de recursos como:
+                        <ul>
+                            <li>**Apelación:** Permite revisar sentencias o autos por un órgano superior.</li>
+                            <li>**Casación:** Para unificar la jurisprudencia o corregir graves errores de derecho.</li>
+                            <li>**Queja:** Contra resoluciones que deniegan apelación o casación.</li>
+                            <li>**Revisión:** Para casos de sentencias firmes con nuevos elementos de juicio.</li>
+                        </ul>
+                        La impugnación es un pilar del debido proceso, permitiendo revisar errores jurídicos, nulidades o afectaciones a los derechos procesales, garantizando la doble instancia y la corrección de injusticias. La película refleja un sistema donde estos mecanismos son inútiles o inexistentes.
+                    `
+                }
+            ];
+
+            let currentComparisonIndex = 0;
+
+            // Función para mostrar una comparación específica
+            function displayComparison(index) {
+                if (index >= 0 && index < comparisons.length) {
+                    const comparison = comparisons[index];
+                    comparisonDisplay.innerHTML = `
+                        <h2>${comparison.title}</h2>
+                        <div class="comparison-columns">
+                            <div class="column">
+                                <h3 class="cpp-title">
+                                    <i class="fas fa-gavel"></i> 🔹 Lo que dice el CPP peruano (D. Leg. 957)
+                                </h3>
+                                ${comparison.cpp}
+                            </div>
+                            <div class="column">
+                                <h3 class="movie-title">
+                                    <i class="fas fa-film"></i> 🔸 Lo que muestra la película
+                                </h3>
+                                ${comparison.movie}
+                            </div>
+                        </div>
+                    `;
+                    comparisonDisplay.classList.add('active'); // Activa la animación
+
+                    // Controlar la visibilidad de los botones
+                    prevComparisonBtn.disabled = (index === 0);
+                    nextComparisonBtn.style.display = 'inline-flex'; // Muestra Siguiente
+                    returnHomeBtn.style.display = 'none'; // Oculta Volver al inicio
+
+                    if (index === comparisons.length - 1) {
+                        nextComparisonBtn.style.display = 'none'; // Oculta Siguiente al final
+                        returnHomeBtn.style.display = 'inline-flex'; // Muestra Volver al inicio al final
+                    }
+
+                    // Desplazamiento suave para que la nueva tarjeta sea visible
+                    setTimeout(() => {
+                        comparisonDisplay.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+
+                } else {
+                    // Si no hay más comparaciones, muestra un mensaje final
+                    comparisonDisplay.innerHTML = `
+                        <h2>¡Análisis Completado!</h2>
+                        <p style="text-align: center; font-size: 1.3em; color: var(--text-dark); margin-bottom: 20px;">
+                            Has revisado todas las comparaciones clave entre la película "El Secreto de sus Ojos"
+                            y los principios del Código Procesal Penal peruano (D. Leg. 957).
+                        </p>
+                        <p style="text-align: center; font-size: 1.2em; color: var(--text-dark);">
+                            Este análisis destaca las profundas diferencias entre un sistema procesal garantista
+                            y las prácticas judiciales retratadas en la ficción, que a menudo reflejan realidades históricas.
+                        </p>
+                    `;
+                    comparisonDisplay.classList.add('active');
+                    prevComparisonBtn.disabled = true;
+                    nextComparisonBtn.style.display = 'none'; // Asegura que el botón siguiente esté oculto
+                    returnHomeBtn.style.display = 'inline-flex'; // Muestra Volver al inicio
+                }
+            }
+
+            // Event Listeners para los botones
+            nextComparisonBtn.addEventListener('click', () => {
+                if (currentComparisonIndex < comparisons.length - 1) {
+                    currentComparisonIndex++;
+                    displayComparison(currentComparisonIndex);
+                }
+            });
+
+            prevComparisonBtn.addEventListener('click', () => {
+                if (currentComparisonIndex > 0) {
+                    currentComparisonIndex--;
+                    displayComparison(currentComparisonIndex);
+                }
+            });
+
+            returnHomeBtn.addEventListener('click', () => {
+                currentComparisonIndex = 0; // Vuelve al inicio de las comparaciones
+                displayComparison(currentComparisonIndex);
+            });
+
+            // Mostrar la primera comparación al cargar la página
+            displayComparison(currentComparisonIndex);
+        });
+    </script>
+</body>
+</html>
