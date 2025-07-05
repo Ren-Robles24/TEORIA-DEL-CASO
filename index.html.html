@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEORÍA DEL CASO – EL SECRETO DE SUS OJOS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Variables CSS para una gestión de colores y estilos más sencilla */
+        :root {
+            --primary-bg: #1a202c; /* Azul muy oscuro, casi negro */
+            --secondary-bg: #2d3748; /* Gris azulado oscuro */
+            --card-bg: #ffffff; /* Blanco para tarjetas de contenido */
+            --text-light: #f7fafc; /* Gris claro para texto en fondos oscuros */
+            --text-dark: #2d3748; /* Gris oscuro para texto en fondos claros */
+            --accent-factica: #e53e3e; /* Rojo vibrante para Fáctica */
+            --accent-juridica: #3182ce; /* Azul brillante para Jurídica */
+            --accent-probatoria: #38a169; /* Verde esmeralda para Probatoria */
+            --hover-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            --border-radius: 12px;
+            --transition-speed: 0.4s ease-in-out;
+            --header-height: 80px;
+        }
+
+        /* Estilos base del cuerpo */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--primary-bg);
+            color: var(--text-light);
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden; /* Previene el scroll horizontal */
+        }
+
+        /* Encabezado fijo (Navbar) */
+        .header-bar {
+            background-color: var(--secondary-bg);
+            padding: 15px 30px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-bar h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8em;
+            color: var(--text-light);
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        /* Contenedor principal */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            flex-grow: 1; /* Permite que ocupe el espacio restante */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Sección de bienvenida inicial */
+        #initial-screen {
+            text-align: center;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - var(--header-height) - 100px); /* Ajusta a la altura de la vista */
+            width: 100%;
+        }
+
+        #initial-screen .main-title-initial {
+            font-family: 'Poppins', sans-serif;
+            font-size: 4em;
+            color: var(--text-light);
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.6);
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+            line-height: 1.2;
+        }
+
+        /* Contenedores de las tarjetas/opciones principales */
+        .main-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 35px;
+            width: 100%;
+            max-width: 1000px; /* Limita el ancho para que no se extiendan demasiado */
+        }
+
+        .option-card {
+            background-color: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            padding: 40px 30px;
+            width: 280px; /* Ancho fijo para las tarjetas */
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed), background-color var(--transition-speed);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px; /* Barra superior de color */
+            background-color: transparent;
+            transition: background-color var(--transition-speed);
+        }
+
+        #card-factica::before { background-color: var(--accent-factica); }
+        #card-juridica::before { background-color: var(--accent-juridica); }
+        #card-probatoria::before { background-color: var(--accent-probatoria); }
+
+
+        .option-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--hover-shadow);
+            background-color: #3f506e; /* Un tono ligeramente más claro al hover */
+        }
+
+        .option-card .icon {
+            font-size: 4.5em;
+            margin-bottom: 20px;
+            color: var(--text-light); /* Color base del icono */
+            transition: color var(--transition-speed);
+        }
+        /* Colores de íconos en hover */
+        #card-factica:hover .icon { color: var(--accent-factica); }
+        #card-juridica:hover .icon { color: var(--accent-juridica); }
+        #card-probatoria:hover .icon { color: var(--accent-probatoria); }
+
+        .option-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.6em;
+            color: var(--text-light);
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* Secciones de contenido dinámico */
+        .content-section {
+            background-color: var(--card-bg);
+            color: var(--text-dark);
+            border-radius: var(--border-radius);
+            padding: 35px;
+            margin-top: 40px;
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            box-sizing: border-box;
+            display: none; /* Oculto por defecto */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity var(--transition-speed), transform var(--transition-speed);
+        }
+
+        .content-section.active {
+            display: block; /* Muestra cuando está activo */
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .content-section h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 35px;
+            color: var(--primary-dark);
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+
+        /* Estilos para las tablas (Fundamentación Fáctica y Jurídica/Probatoria) */
+        .table-container {
+            overflow-x: auto; /* Permite scroll en tablas para móviles */
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.05em;
+            min-width: 600px; /* Asegura que la tabla no sea demasiado estrecha */
+        }
+
+        table th, table td {
+            border: 1px solid #e0e0e0;
+            padding: 18px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: var(--secondary-bg);
+            color: var(--text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.95em;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+
+        table tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        table ul {
+            margin: 0;
+            padding-left: 20px;
+            list-style-type: disc;
+        }
+        table li {
+            margin-bottom: 5px;
+        }
+
+
+        /* Estilos para pares Pregunta-Respuesta (Fundamentación Fáctica) */
+        .qa-pair {
+            background-color: #fcfcfc;
+            border: 1px solid #e9e9e9;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .qa-pair h3 {
+            font-size: 1.5em;
+            color: var(--accent-factica);
+            margin-top: 0;
+            margin-bottom: 12px;
+            border-bottom: 1px dashed #e0e0e0;
+            padding-bottom: 8px;
+        }
+
+        .qa-pair p {
+            font-size: 1.05em;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        /* Estilos para elementos de Calificación Jurídica (Secuencial) */
+        .analysis-element-seq {
+            background-color: #fcfcfc;
+            border: 1px solid #e9e9e9;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            line-height: 1.7;
+        }
+
+        .analysis-element-seq h3 {
+            font-size: 1.7em;
+            color: var(--accent-juridica);
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .analysis-element-seq p, .analysis-element-seq ul {
+            font-size: 1.1em;
+            color: var(--text-dark);
+        }
+        .analysis-element-seq ul {
+            padding-left: 25px;
+            list-style-type: disc;
+        }
+        .analysis-element-seq li {
+            margin-bottom: 5px;
+        }
+
+        /* Estilos para elementos de Fundamentos Probatorios (Secuencial) */
+        .proof-element-seq {
+            background-color: #fcfcfc;
+            border: 1px solid #e9e9e9;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .proof-element-seq h3 {
+            font-size: 1.7em;
+            color: var(--accent-probatoria);
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .proof-detail {
+            margin-bottom: 20px;
+        }
+
+        .proof-detail strong {
+            display: block;
+            font-size: 1.2em;
+            color: var(--secondary-dark);
+            margin-bottom: 8px;
+        }
+
+        .proof-detail p, .proof-detail ul {
+            font-size: 1.1em;
+            color: var(--text-dark);
+            margin-top: 0;
+            padding-left: 20px;
+        }
+
+        /* Contenedor de botones de navegación */
+        .navigation-buttons {
+            display: flex;
+            justify-content: flex-end; /* Alinea los botones a la derecha */
+            gap: 15px;
+            width: 100%;
+            margin-top: 30px;
+        }
+        .navigation-buttons.center {
+            justify-content: center; /* Para centrar si es necesario */
+        }
+
+        /* Estilo base del botón */
+        .nav-button {
+            background-color: var(--secondary-bg);
+            color: var(--text-light);
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
+            flex-shrink: 0; /* Evita que los botones se encojan */
+        }
+
+        .nav-button:hover {
+            background-color: #526581;
+            transform: translateY(-3px);
+        }
+
+        /* Botón primario (generalmente "Siguiente" o "Ir a...") */
+        .nav-button.primary { 
+            background-color: var(--accent-juridica); /* Default para "Siguiente" en Jurídica */
+        }
+        .nav-button.primary:hover {
+            background-color: #2b6cb0;
+        }
+        /* Colores específicos para los botones "Siguiente" de cada sección */
+        .nav-button.next-factica {
+            background-color: var(--accent-factica);
+        }
+        .nav-button.next-factica:hover {
+            background-color: #c53030;
+        }
+        .nav-button.next-juridica { /* Este es el primary por defecto para Jurídica */
+            background-color: var(--accent-juridica);
+        }
+        .nav-button.next-probatoria {
+            background-color: var(--accent-probatoria);
+        }
+        .nav-button.next-probatoria:hover {
+            background-color: #2f855a;
+        }
+
+        .nav-button.hidden {
+            display: none;
+        }
+        
+        /* Pie de página */
+        .footer {
+            margin-top: auto; /* Empuja el footer al final */
+            padding: 25px 20px;
+            background-color: var(--secondary-bg);
+            color: var(--text-light);
+            text-align: center;
+            font-size: 0.9em;
+            width: 100%;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .main-options {
+                gap: 25px;
+            }
+            .option-card {
+                width: 250px;
+                padding: 35px 25px;
+            }
+            .option-card .icon {
+                font-size: 4em;
+            }
+            .option-card h3 {
+                font-size: 1.4em;
+            }
+            .content-section h2 {
+                font-size: 2em;
+            }
+            table th, table td {
+                padding: 15px;
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+                padding: 15px;
+            }
+            .header-bar h1 {
+                font-size: 1.5em;
+            }
+            #initial-screen .main-title-initial {
+                font-size: 3em;
+                margin-bottom: 40px;
+            }
+            .main-options {
+                flex-direction: column;
+                align-items: center;
+                gap: 25px;
+            }
+            .option-card {
+                width: 90%;
+                max-width: 350px;
+                padding: 30px 20px;
+            }
+            .option-card .icon {
+                font-size: 3.5em;
+            }
+            .option-card h3 {
+                font-size: 1.3em;
+            }
+            .content-section {
+                padding: 25px;
+            }
+            .content-section h2 {
+                font-size: 1.8em;
+                margin-bottom: 25px;
+            }
+            .qa-pair h3, .analysis-element-seq h3, .proof-element-seq h3 {
+                font-size: 1.3em;
+            }
+            .qa-pair p, .analysis-element-seq p, .analysis-element-seq ul, .proof-detail p, .proof-detail ul {
+                font-size: 0.95em;
+            }
+            .proof-detail strong {
+                font-size: 1.1em;
+            }
+            .navigation-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .nav-button {
+                width: 90%;
+                max-width: 280px;
+                font-size: 1em;
+                padding: 10px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-bar h1 {
+                font-size: 1.3em;
+            }
+            #initial-screen .main-title-initial {
+                font-size: 2.2em;
+            }
+            .option-card {
+                padding: 25px 15px;
+            }
+            .option-card .icon {
+                font-size: 3em;
+            }
+            .option-card h3 {
+                font-size: 1.2em;
+            }
+            .content-section h2 {
+                font-size: 1.6em;
+            }
+            table th, table td {
+                padding: 12px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-bar">
+        <h1>TEORÍA DEL CASO – EL SECRETO DE SUS OJOS</h1>
+    </header>
+
+    <main class="container">
+        <section id="initial-screen">
+            <h2 class="main-title-initial">TEORÍA DEL CASO<br>EL SECRETO DE SUS OJOS</h2>
+            <div class="main-options">
+                <div class="option-card" id="card-factica" data-target="factica-section">
+                    <i class="fas fa-puzzle-piece icon"></i>
+                    <h3>Fundamentación Fáctica</h3>
+                </div>
+                <div class="option-card" id="card-juridica" data-target="juridica-section">
+                    <i class="fas fa-balance-scale icon"></i>
+                    <h3>Calificación Jurídica</h3>
+                </div>
+                <div class="option-card" id="card-probatoria" data-target="probatoria-section">
+                    <i class="fas fa-file-alt icon"></i>
+                    <h3>Fundamentos Probatorios</h3>
+                </div>
+            </div>
+        </section>
+
+        <section id="factica-section" class="content-section">
+            <h2>Fundamentación Fáctica</h2>
+            <div class="qa-pair">
+                <h3>¿Dónde ocurrieron los hechos?</h3>
+                <p>En el domicilio de la víctima, Liliana Colotto de Morales, ubicado en un barrio de clase media en la ciudad de Buenos Aires, Argentina. El cuerpo es hallado sin vida en el dormitorio de su vivienda.</p>
+            </div>
+            <div class="qa-pair">
+                <h3>¿Quién es el sujeto activo?</h3>
+                <p>Isidoro Gómez, hombre joven, soltero, empleado estatal, sin antecedentes penales registrados, con vínculos laborales indirectos con el entorno de la víctima. Presentaba una obsesión progresiva hacia ella, observada por terceros y reflejada en imágenes previas al crimen.</p>
+            </div>
+            <div class="qa-pair">
+                <h3>¿Quién es la víctima (sujeto pasivo)?</h3>
+                <p>Liliana Colotto, joven mujer, maestra de escuela, sin conflictos personales ni antecedentes delictivos. Casada con Ricardo Morales, quien la adoraba profundamente. No existía relación directa con su agresor, pero sí había sido objeto de miradas insistentes y silenciosas por parte de Gómez.</p>
+            </div>
+            <div class="qa-pair">
+                <h3>¿Cómo ocurrieron los hechos?</h3>
+                <p>Gómez ingresó al domicilio de la víctima aprovechando un momento en que ella se encontraba sola. La sometió sexualmente mediante la fuerza o amenaza, posiblemente bajo asfixia parcial (como se insinúa), y luego la asesinó, dejando rastros de violencia física y sexual. El cuerpo es encontrado con signos claros de violación y estrangulamiento. La puerta no fue forzada, lo que sugiere conocimiento previo de los accesos.</p>
+            </div>
+            <div class="qa-pair">
+                <h3>¿A quién afectaron los hechos?</h3>
+                <p>A la víctima directa (Liliana Colotto), a su esposo (Ricardo Morales) que queda profundamente marcado emocionalmente, y al investigador del caso (Benjamín Espósito), que carga con la frustración institucional del sistema judicial.</p>
+            </div>
+            <div class="qa-pair">
+                <h3>¿Por qué ocurrieron los hechos?</h3>
+                <p>El móvil fue emocional-pasional: una obsesión no correspondida de Gómez hacia la víctima. Al no poder establecer vínculo alguno con ella, Gómez opta por consumirla mediante la violencia, en un acto de posesión extrema. No hay móvil económico ni venganza directa.</p>
+            </div>
+            <div class="qa-pair">
+                <h3>¿Cuándo ocurrieron los hechos?</h3>
+                <p>El crimen ocurrió a mediados de los años setenta, en el contexto de una Argentina pre-dictatorial, con un sistema judicial penetrado por la corrupción y la impunidad. El hecho se sitúa entre 1974 y 1975 aproximadamente, según el desarrollo de la narrativa.</p>
+            </div>
+            <div class="navigation-buttons">
+                <button class="nav-button next-factica" data-action="next-section" data-target="juridica-section">Ir a Calificación Jurídica</button>
+                <button class="nav-button" data-action="back-to-home">Volver al inicio</button>
+            </div>
+        </section>
+
+        <section id="juridica-section" class="content-section">
+            <h2>Calificación Jurídica</h2>
+            <div id="juridica-element-display">
+                </div>
+            <div class="navigation-buttons">
+                <button class="nav-button primary" id="nextJuridicaBtn">Siguiente elemento</button>
+                <button class="nav-button next-probatoria" data-action="next-section" data-target="probatoria-section" style="display: none;">Ir a Fundamentos Probatorios</button>
+                <button class="nav-button" data-action="back-to-home" style="display: none;">Volver al inicio</button>
+            </div>
+        </section>
+
+        <section id="probatoria-section" class="content-section">
+            <h2>Fundamentos Probatorios</h2>
+            <div id="probatoria-element-display">
+                </div>
+            <div class="navigation-buttons">
+                <button class="nav-button primary" id="nextProbatoriaBtn">Siguiente prueba</button>
+                <button class="nav-button" data-action="back-to-home" style="display: none;">Volver al inicio</button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        Análisis jurídico elaborado por Renzo Vidal Robles Orosco – 2025
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialScreen = document.getElementById('initial-screen');
+            const optionCards = document.querySelectorAll('.option-card');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            // Botones de navegación
+            const backToHomeButtons = document.querySelectorAll('[data-action="back-to-home"]');
+            const nextSectionButtons = document.querySelectorAll('[data-action="next-section"]'); // Nuevo selector para botones de avance entre secciones
+
+            // --- Datos para Calificación Jurídica ---
+            const juridicalElements = [
+                {
+                    title: "Elemento 1: Tipo penal principal",
+                    content: "El hecho encuadra en el tipo penal de violación sexual seguida de homicidio, que en muchos ordenamientos jurídicos (como el argentino o el peruano) constituye un concurso real o un homicidio agravado por violencia sexual. En códigos más modernos, también puede calificarse como femicidio (por violencia basada en género, odio o dominación)."
+                },
+                {
+                    title: "Elemento 2: Tipo penal en el marco del Código Penal argentino",
+                    content: `
+                        <ul>
+                            <li>Artículo 119 del Código Penal argentino: abuso sexual con acceso carnal.</li>
+                            <li>Artículo 80, inciso 11 (modificado por Ley 26.791): homicidio agravado por mediar violencia de género (femicidio).</li>
+                            <li>En la época de los hechos, no existía el término "femicidio", pero hoy aplicaría.</li>
+                            <li>Concurso real de delitos o figura mixta agravada.</li>
+                        </ul>
+                    `
+                },
+                {
+                    title: "Elemento 3: Agravantes específicas",
+                    content: `
+                        <ul>
+                            <li>Alevosía: la víctima estaba sola y no podía defenderse.</li>
+                            <li>Premeditación: conducta obsesiva previa, seguimiento, planificación.</li>
+                            <li>Relación de confianza indirecta: el autor tenía acceso al entorno de la víctima.</li>
+                            <li>Violencia de género implícita: dominación y anulación de la voluntad femenina.</li>
+                        </ul>
+                    `
+                },
+                {
+                    title: "Elemento 4: Hecho conexo posterior",
+                    content: "El encierro ilegal de Isidoro Gómez por parte de Ricardo Morales durante más de 20 años en un galpón. Este hecho puede configurar una privación ilegítima de la libertad (secuestro), aunque moralmente se interpreta como justicia por mano propia ante la ineficacia del sistema judicial."
+                },
+                {
+                    title: "Elemento 5: Responsabilidad penal omitida del Estado",
+                    content: "El Estado, a través de su poder judicial y ministerio del interior, falló en brindar tutela efectiva a la víctima, lo que constituye una grave omisión institucional. El autor fue liberado por vínculos políticos y puesto al servicio del aparato represivo del Estado."
+                }
+            ];
+            let currentJuridicaIndex = 0;
+            const juridicaDisplay = document.getElementById('juridica-element-display');
+            const nextJuridicaBtn = document.getElementById('nextJuridicaBtn');
+            const juridicaNextSectionBtn = document.querySelector('#juridica-section [data-action="next-section"]');
+            const juridicaBackToHomeBtn = document.querySelector('#juridica-section [data-action="back-to-home"]');
+
+            // --- Datos para Fundamentos Probatorios ---
+            const proofs = [
+                {
+                    tipo: "Documental",
+                    elementos: `
+                        <ul>
+                            <li>Fotografías donde Gómez observa fijamente a la víctima en reuniones sociales.</li>
+                            <li>Cartas con frases que revelan una obsesión.</li>
+                        </ul>
+                    `,
+                    valor: "Permiten construir un patrón conductual previo al delito: acoso, fijación, premeditación."
+                },
+                {
+                    tipo: "Testimonial",
+                    elementos: `
+                        <ul>
+                            <li>Declaraciones de Espósito, Sandoval y Morales.</li>
+                            <li>Testigos del entorno laboral y familiar de la víctima.</li>
+                            <li>Confesión del propio Morales en la escena final.</li>
+                        </ul>
+                    `,
+                    valor: "Apuntalan la identificación del autor, el móvil emocional, y la evolución del caso hasta su desenlace extrajudicial."
+                },
+                {
+                    tipo: "Indicios",
+                    elementos: `
+                        <ul>
+                            <li>Conducta esquiva de Gómez tras el crimen.</li>
+                            <li>Desaparición y posterior vinculación al aparato represivo estatal.</li>
+                            <li>Posible manipulación del expediente judicial.</li>
+                        </ul>
+                    `,
+                    valor: "Permiten establecer presunción razonable de culpabilidad, incluso sin confesión directa del autor."
+                },
+                {
+                    tipo: "Material o Pericial",
+                    elementos: `
+                        <ul>
+                            <li>Resultados forenses del cadáver (violación, lesiones).</li>
+                            <li>Huellas o rastros (no detallados en la película, pero presumibles).</li>
+                        </ul>
+                    `,
+                    valor: "Refuerzan el hecho material delictivo y la violencia del acto."
+                },
+                {
+                    tipo: "Indirecta o Contextual",
+                    elementos: `
+                        <ul>
+                            <li>El encierro de Gómez, su estado físico y mental.</li>
+                            <li>El relato reconstruido por Espósito al escribir la novela.</li>
+                        </ul>
+                    `,
+                    valor: "Sirven para demostrar que el autor nunca fue juzgado y que el sistema judicial falló. También configuran la justicia alternativa aplicada por Morales."
+                }
+            ];
+            let currentProbatoriaIndex = 0;
+            const probatoriaDisplay = document.getElementById('probatoria-element-display');
+            const nextProbatoriaBtn = document.getElementById('nextProbatoriaBtn');
+            const probatoriaBackToHomeBtn = document.querySelector('#probatoria-section [data-action="back-to-home"]');
+
+
+            // Función para mostrar la sección activa y ocultar las demás
+            function showSection(targetId) {
+                initialScreen.style.display = 'none'; // Oculta la pantalla inicial
+                contentSections.forEach(section => {
+                    section.classList.remove('active'); // Oculta todas las secciones de contenido
+                });
+
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active'); // Muestra la sección deseada
+
+                    // Reiniciar y mostrar contenido específico si es necesario
+                    if (targetId === 'juridica-section') {
+                        currentJuridicaIndex = 0; // Reinicia el índice
+                        showJuridicaElement(); // Muestra el primer elemento
+                    } else if (targetId === 'probatoria-section') {
+                        currentProbatoriaIndex = 0; // Reinicia el índice
+                        showProbatoriaElement(); // Muestra el primer elemento
+                    }
+                    // Para Fáctica, el contenido es estático, solo se muestra.
+
+                    // Desplazamiento suave hacia la sección
+                    setTimeout(() => {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50);
+                }
+            }
+
+            // --- Funciones para Calificación Jurídica (secuencial) ---
+            function showJuridicaElement() {
+                if (currentJuridicaIndex < juridicalElements.length) {
+                    const el = juridicalElements[currentJuridicaIndex];
+                    juridicaDisplay.innerHTML = `
+                        <div class="analysis-element-seq">
+                            <h3>${el.title}</h3>
+                            <div class="element-content">${el.content}</div>
+                        </div>
+                    `;
+                    nextJuridicaBtn.style.display = 'inline-block'; // Muestra "Siguiente elemento"
+                    juridicaNextSectionBtn.style.display = 'none'; // Oculta "Ir a Fundamentos Probatorios"
+                    juridicaBackToHomeBtn.style.display = 'none'; // Oculta "Volver al inicio"
+                } else {
+                    juridicaDisplay.innerHTML = `
+                        <div class="analysis-element-seq">
+                            <h3>Análisis de Calificación Jurídica Completo</h3>
+                            <p>Has completado la sección de Calificación Jurídica.</p>
+                        </div>
+                    `;
+                    nextJuridicaBtn.style.display = 'none'; // Oculta "Siguiente elemento"
+                    juridicaNextSectionBtn.style.display = 'inline-block'; // Muestra "Ir a Fundamentos Probatorios"
+                    juridicaBackToHomeBtn.style.display = 'inline-block'; // Muestra "Volver al inicio"
+                }
+            }
+
+            // --- Funciones para Fundamentos Probatorios (secuencial) ---
+            function showProbatoriaElement() {
+                if (currentProbatoriaIndex < proofs.length) {
+                    const p = proofs[currentProbatoriaIndex];
+                    probatoriaDisplay.innerHTML = `
+                        <div class="proof-element-seq">
+                            <h3>Tipo de prueba: ${p.tipo}</h3>
+                            <div class="proof-detail">
+                                <strong>Elemento probatorio:</strong>
+                                ${p.elementos}
+                            </div>
+                            <div class="proof-detail">
+                                <strong>Valor jurídico:</strong>
+                                <p>${p.valor}</p>
+                            </div>
+                        </div>
+                    `;
+                    nextProbatoriaBtn.style.display = 'inline-block'; // Muestra "Siguiente prueba"
+                    probatoriaBackToHomeBtn.style.display = 'none'; // Oculta "Volver al inicio"
+                } else {
+                    probatoriaDisplay.innerHTML = `
+                        <div class="proof-element-seq">
+                            <h3>Análisis de Fundamentos Probatorios Completo</h3>
+                            <p>Has terminado de revisar la sección de Fundamentos Probatorios.</p>
+                        </div>
+                    `;
+                    nextProbatoriaBtn.style.display = 'none'; // Oculta "Siguiente prueba"
+                    probatoriaBackToHomeBtn.style.display = 'inline-block'; // Muestra "Volver al inicio"
+                }
+            }
+
+            // --- Event Listeners ---
+
+            // Para los clics en las tarjetas de opción (desde la pantalla inicial)
+            optionCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const targetId = card.dataset.target;
+                    showSection(targetId);
+                });
+            });
+
+            // Para los botones "Volver al inicio" (en cualquier sección)
+            backToHomeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    contentSections.forEach(section => {
+                        section.classList.remove('active'); // Oculta todas las secciones de contenido
+                    });
+                    initialScreen.style.display = 'flex'; // Muestra la pantalla inicial (flex para centrar)
+                    window.scrollTo({ top: 0, behavior: 'smooth' }); // Vuelve al top de la página
+                });
+            });
+
+            // Para los nuevos botones de "Ir a [siguiente sección]"
+            nextSectionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.dataset.target;
+                    showSection(targetId);
+                });
+            });
+
+            // Para el botón "Siguiente elemento" de Calificación Jurídica
+            if (nextJuridicaBtn) {
+                nextJuridicaBtn.addEventListener('click', () => {
+                    currentJuridicaIndex++;
+                    showJuridicaElement();
+                });
+            }
+
+            // Para el botón "Siguiente prueba" de Fundamentos Probatorios
+            if (nextProbatoriaBtn) {
+                nextProbatoriaBtn.addEventListener('click', () => {
+                    currentProbatoriaIndex++;
+                    showProbatoriaElement();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
