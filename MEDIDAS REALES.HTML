@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procedimientos Jurídicos Integrados</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos generales del cuerpo */
+        body {
+            font-family: 'Inter', sans-serif; /* Usando la fuente Inter */
+            background-color: #e2e8f0; /* Fondo gris azulado suave */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Asegura que el cuerpo ocupe al menos toda la altura de la vista */
+            color: #333; /* Color de texto general */
+        }
+
+        /* Estilos para el encabezado principal */
+        .main-header {
+            background-color: #1a202c; /* Azul oscuro para el encabezado */
+            color: white;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            font-size: 2.25rem; /* Tamaño de fuente grande */
+            font-weight: 700; /* Negrita */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
+            margin-bottom: 1rem;
+        }
+
+        /* Estilos para la barra de navegación */
+        nav {
+            background: linear-gradient(to right, #4a5568, #2d3748); /* Gradiente de gris oscuro */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); /* Sombra más profunda */
+            padding: 1rem;
+            display: flex;
+            justify-content: center; /* Centra los botones */
+            gap: 1rem; /* Espacio entre botones */
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom-left-radius: 1rem; /* Bordes redondeados inferiores */
+            border-bottom-right-radius: 1rem;
+            margin-bottom: 2rem; /* Espacio debajo de la barra de navegación */
+        }
+
+        /* Estilos para los botones de navegación */
+        nav button {
+            transition: all 0.3s ease-in-out; /* Transición más suave */
+            border-radius: 0.75rem; /* Bordes más redondeados */
+            font-weight: 600; /* Peso de la fuente más fuerte */
+            padding: 0.85rem 1.8rem; /* Relleno ligeramente mayor */
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            background-color: #6b7280; /* Gris medio */
+            color: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); /* Sombra sutil */
+        }
+
+        /* Estilo para el hover de los botones de navegación */
+        nav button:hover {
+            background-color: #4f5b6e; /* Gris más oscuro al pasar el ratón */
+            transform: translateY(-2px); /* Efecto de elevación */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más grande al pasar el ratón */
+        }
+
+        /* Estilo para el botón de navegación activo */
+        nav button.active {
+            background-color: #3b82f6; /* Azul vibrante */
+            color: white;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); /* Sombra con color del botón */
+            transform: translateY(-1px); /* Ligera elevación para el activo */
+            border: 2px solid #60a5fa; /* Borde azul claro */
+        }
+
+        /* Estilos para las secciones de contenido */
+        .section {
+            display: none; /* Oculta todas las secciones por defecto */
+            flex-grow: 1; /* Permite que la sección ocupe el espacio disponible */
+            padding: 1rem;
+            box-sizing: border-box;
+            background-color: #ffffff; /* Fondo blanco para las secciones */
+            border-radius: 1rem; /* Bordes redondeados para las secciones */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+            margin: 0 2rem; /* Margen horizontal para centrar el contenido */
+            animation: fadeIn 0.5s ease-out; /* Animación de aparición */
+        }
+
+        /* Estilo para la sección activa */
+        .section.active {
+            display: block; /* Muestra la sección activa */
+        }
+
+        /* Animación de aparición */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos para los iframes */
+        iframe {
+            width: 100%; /* Ancho completo */
+            height: 1200px; /* Altura fija, se puede ajustar según necesidad */
+            background-color: #ffffff; /* Fondo blanco */
+            border-radius: 0.75rem; /* Bordes más redondeados */
+            border: 1px solid #e5e7eb; /* Borde sutil */
+        }
+
+        /* Estilos para el título de la sección */
+        .section-title {
+            font-size: 1.75rem; /* Tamaño de fuente para el título de la sección */
+            font-weight: 700; /* Negrita */
+            color: #2d3748; /* Color de texto oscuro */
+            text-align: center;
+            margin-bottom: 1.5rem; /* Espacio debajo del título */
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #cbd5e0; /* Borde inferior para el título */
+        }
+
+        /* Estilos responsivos para la barra de navegación */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column; /* Apila los botones en pantallas pequeñas */
+                align-items: center; /* Centra los botones */
+                padding: 0.75rem;
+                gap: 0.75rem; /* Menor espacio entre botones apilados */
+                border-radius: 0; /* Sin bordes redondeados en móvil para ocupar todo el ancho */
+            }
+            nav button {
+                width: 90%; /* Ocupa casi todo el ancho */
+                margin-bottom: 0; /* Elimina el margen inferior extra */
+            }
+            .section {
+                margin: 0 1rem; /* Menor margen horizontal en móvil */
+            }
+            .main-header {
+                font-size: 1.5rem; /* Reduce el tamaño del encabezado en móvil */
+                padding: 1rem;
+            }
+            .section-title {
+                font-size: 1.5rem; /* Reduce el tamaño del título de sección en móvil */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Encabezado principal de la aplicación -->
+    <header class="main-header">
+        Procedimientos Jurídicos Integrados
+    </header>
+
+    <!-- Menú de navegación -->
+    <nav>
+        <button onclick="showSection('incautacion', event)" class="px-4 py-2 rounded hover:bg-blue-100">Incautación</button>
+        <button onclick="showSection('pension', event)" class="px-4 py-2 rounded hover:bg-green-100">Pensión de Alimentos</button>
+        <button onclick="showSection('desalojo', event)" class="px-4 py-2 rounded hover:bg-yellow-100">Desalojo Preventivo</button>
+        <button onclick="showSection('inhibicion', event)" class="px-4 py-2 rounded hover:bg-red-100">Orden de Inhibición</button>
+        <button onclick="showSection('embargo', event)" class="px-4 py-2 rounded hover:bg-red-100">Embargo</button>
+    </nav>
+
+    <!-- Contenido incrustado -->
+    <main class="p-4 flex-grow">
+        <section id="incautacion" class="section active">
+            <h2 class="section-title">Incautación</h2>
+            <iframe src="https://roygp17.github.io/INCAUTACION/" title="Incautación"></iframe>
+        </section>
+        <section id="pension" class="section">
+            <h2 class="section-title">Pensión de Alimentos</h2>
+            <iframe src="https://roygp17.github.io/P.ALIMENTOS/" title="Pensión de Alimentos"></iframe>
+        </section>
+        <section id="desalojo" class="section">
+            <h2 class="section-title">Desalojo Preventivo</h2>
+            <iframe src="https://roygp17.github.io/DESALOJO-PREVENTIVO/" title="Desalojo Preventivo"></iframe>
+        </section>
+        <section id="inhibicion" class="section">
+            <h2 class="section-title">Orden de Inhibición</h2>
+            <iframe src="https://roygp17.github.io/INHIBICION/" title="Orden de Inhibición"></iframe>
+        </section>
+        <section id="embargo" class="section">
+            <h2 class="section-title">Embargo</h2>
+            <iframe src="https://roygp17.github.io/EMBARGO/" title="Orden de Embargo"></iframe>
+        </section>
+    </main>
+
+    <!-- Script para navegación -->
+    <script>
+        // Función para mostrar la sección seleccionada y actualizar el estado del botón
+        function showSection(id, event) {
+            // Oculta todas las secciones
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            // Muestra la sección con el ID proporcionado
+            document.getElementById(id).classList.add('active');
+
+            // Elimina la clase 'active' de todos los botones de navegación
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+            // Añade la clase 'active' al botón que fue clicado
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+        }
+
+        // Asegura que la sección 'incautacion' esté activa y su botón resaltado al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            const incautacionButton = document.querySelector('button[onclick*="incautacion"]');
+            if (incautacionButton) {
+                // Simula un clic en el botón de incautación para activarlo
+                showSection('incautacion', { target: incautacionButton });
+            }
+        });
+    </script>
+</body>
+</html>
